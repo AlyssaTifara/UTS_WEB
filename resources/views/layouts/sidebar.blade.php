@@ -25,41 +25,41 @@
             <!-- Data Pengguna -->
             <li class="nav-header">Data Pengguna</li>
             <li class="nav-item">
-                <a href="{{ url('/level') }}" class="nav-link {{ ($activeMenu == 'level') ? 'active' : '' }}">
+                <a href="{{ url('/karyawan') }}" class="nav-link {{ ($activeMenu == 'level') ? 'active' : '' }}">
                     <i class="nav-icon fas fa-layer-group"></i>
-                    <p>Level User</p>
+                    <p>Data Karyawan</p>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="{{ url('/user') }}" class="nav-link {{ ($activeMenu == 'user') ? 'active' : '' }}">
+                <a href="{{ url('/jabatan') }}" class="nav-link {{ ($activeMenu == 'user') ? 'active' : '' }}">
                     <i class="nav-icon far fa-user"></i>
-                    <p>Data User</p>
+                    <p>Data Jabatan</p>
                 </a>
             </li>
 
             <!-- Data Barang -->
-            <li class="nav-header">Data Barang</li>
+            <li class="nav-header">Data Mobil</li>
             <li class="nav-item">
                 <a href="{{ url('/kategori') }}" class="nav-link {{ ($activeMenu == 'kategori') ? 'active' : '' }}">
                     <i class="nav-icon far fa-bookmark"></i>
-                    <p>Kategori Barang</p>
+                    <p>Kategori Mobil</p>
                 </a>
             </li>
             <li class="nav-item">
                 <a href="{{ url('/barang') }}" class="nav-link {{ ($activeMenu == 'barang') ? 'active' : '' }}">
                     <i class="nav-icon far fa-list-alt"></i>
-                    <p>Data Barang</p>
+                    <p>Data Mobil</p>
                 </a>
             </li>
-            <li class="nav-header">Data Supplier</li> 
+            {{-- <li class="nav-header">Data Supplier</li> 
             <li class="nav-item">
                 <a href="{{ url('/supplier') }}" class="nav-link {{ ($activeMenu == 'supplier') ? 'active' : '' }}"> 
                     <i class="nav-icon fas fa-truck"></i>
                     <p>Supplier Barang</p> 
                 </a>
-            </li>
+            </li> --}}
 
-            <!-- Data Transaksi -->
+            {{-- <!-- Data Transaksi -->
             <li class="nav-header">Data Transaksi</li>
             <li class="nav-item">
                 <a href="{{ url('/stok') }}" class="nav-link {{ ($activeMenu == 'stok') ? 'active' : '' }}">
@@ -72,6 +72,6 @@
                     <i class="nav-icon fas fa-cash-register"></i>
                     <p>Transaksi Penjualan</p>
                 </a>
-            </li>
+            </li> --}}
         </ul>
     </nav>

@@ -1,10 +1,10 @@
-@extends('template')
+@extends('layouts.template')
 
 @section('content')
 <div class="container mt-4">
     <div class="card">
         <div class="card-header">
-            <h3>Selamat Datang di Aplikasi Showroom </h3>
+            <h3>Selamat Datang di Showroom Kami</h3>
         </div>
         <div class="card-body">
             <ul>

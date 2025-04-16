@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ config('app.name', 'PWL Laravel Starter Code') }}</title>
+    <title>{{ config('app.name', 'UTS Laravel Starter Code') }}</title>
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
@@ -32,11 +32,11 @@
         <!-- Main Sidebar Container -->
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->
-            <a href="{{ url('/') }}" class="brand-link">
-                <img src="{{ asset('adminlte2/dist/img/AdminLTELogo.png') }}" alt="AdminLTE Logo"
-                    class="brand-image img-circle elevation-3" style="opacity: .8">
-                <span class="brand-text font-weight-light">PWL Starter Code</span>
-            </a>
+        <a href="{{ url('/') }}" class="brand-link d-flex align-items-center">
+            <img src="{{ asset('adminlte2/dist/img/logo2.png') }}" alt="logo2"
+                style="width: 50px; height: 50px; opacity: .9; margin-right: 10px;" class="img-circle elevation-3">
+            <span class="brand-text font-weight-light" style="font-size: 1.50rem;">Alyssa & Co.</span>
+        </a>
 
             <!-- Sidebar -->
             @include('layouts.sidebar')
