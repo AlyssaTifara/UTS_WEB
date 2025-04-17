@@ -11,7 +11,7 @@ class Jabatan extends Model
 
     protected $table = 'jabatan';
 
-    protected $primaryKey = 'kode_jabatan';
+    protected $primaryKey = 'id';
 
     public $incrementing = false;
 
