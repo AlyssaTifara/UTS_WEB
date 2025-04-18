@@ -32,7 +32,11 @@
                 <table class="table table-sm table-bordered table-striped">
                     <tr>
                         <th class="text-right col-3">Nama Karyawan :</th>
-                        <td class="col-9">{{ $karyawan->name }}</td>
+                        <td class="col-9">{{ $karyawan->nama }}</td>
+                    </tr>
+                    <tr>
+                        <th class="text-right col-3">NIK Karyawan :</th>
+                        <td class="col-9">{{ $karyawan->nik }}</td>
                     </tr>
                     <tr>
                         <th class="text-right col-3">Jabatan :</th>
@@ -43,8 +47,12 @@
                         <td class="col-9">{{ $karyawan->email }}</td>
                     </tr>
                     <tr>
+                        <th class="text-right col-3">Alamat :</th>
+                        <td class="col-9">{{ $karyawan->alamat }}</td>
+                    </tr>
+                    <tr>
                         <th class="text-right col-3">Telepon :</th>
-                        <td class="col-9">{{ $karyawan->telepon }}</td>
+                        <td class="col-9">{{ $karyawan->no_telepon }}</td>
                     </tr>
                 </table>
             </div>

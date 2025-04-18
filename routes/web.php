@@ -14,7 +14,7 @@ Route::get('/jabatan', [JabatanController::class, 'index']);
 // Grouping routes for karyawan views
 Route::group(['prefix' => 'karyawan'], function () {
     Route::get('/create_ajax', [KaryawanController::class, 'create_ajax']);
-    // Route::post('/create_ajax', [KaryawanController::class, 'store_ajax']);
+    Route::post('/ajax', [KaryawanController::class, 'store_ajax']);
     Route::get('/', [KaryawanController::class, 'index']);
     Route::post('/list', [KaryawanController::class, 'list']);
     Route::get('/show/{id}', [KaryawanController::class, 'show']);

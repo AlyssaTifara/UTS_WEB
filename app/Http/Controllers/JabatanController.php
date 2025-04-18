@@ -49,7 +49,7 @@ class JabatanController extends Controller
             ->make(true);
     }
 
-    public function create()
+    public function create_ajax()
     {
         return view('jabatan.create_ajax');
     }
@@ -86,7 +86,7 @@ class JabatanController extends Controller
         return response()->json($jabatan);
     }
 
-    public function edit($id)
+    public function edit_ajax($id)
     {
         $jabatan = Jabatan::findOrFail($id);
         return view('jabatan.edit_ajax', compact('jabatan'));
@@ -120,7 +120,7 @@ class JabatanController extends Controller
         return redirect('/jabatan');
     }
 
-    public function confirm($id)
+    public function confirm_ajax($id)
     {
         $jabatan = Jabatan::findOrFail($id);
         return view('jabatan.confirm_ajax', compact('jabatan'));

@@ -13,7 +13,7 @@
                     <small id="error-name" class="error-text form-text text-danger"></small>
                 </div>
                 <div class="form-group">
-                    <label>NIK</label>
+                    <label>NIK Karyawan</label>
                     <input value="" type="text" name="nik" id="nik" class="form-control" required>
                     <small id="error-nik" class="error-text form-text text-danger"></small>
                 </div>
@@ -55,7 +55,7 @@
     $(document).ready(function() {
         $("#form-tambah").validate({
             rules: {
-                name: {
+                nama: {
                     required: true,
                     minlength: 3,
                     maxlength: 100
@@ -65,9 +65,6 @@
                     minlength: 6,  
                     maxlength: 16
                 },
-                kode_jabatan: {
-                    required: true
-                },
                 email: {
                     required: true,
                     email: true
@@ -76,6 +73,9 @@
                     required: true,
                     minlength: 5,
                     maxlength: 255
+                },
+                kode_jabatan: {
+                    required: true
                 },
                 no_telepon: {
                     required: true,

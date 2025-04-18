@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Validator;
 
 class KaryawanController extends Controller
 {
+    // Halaman awal karyawan
     public function index()
     {
         $breadcrumb = (object) [
@@ -33,6 +34,7 @@ class KaryawanController extends Controller
         ]);
     }
 
+    // Data dalam bentuk tabel
     public function list(Request $request)
     {
         $karyawans = Karyawan::select('nama', 'nik', 'email', 'alamat', 'no_telepon', 'kode_jabatan')->with('jabatan');
@@ -51,18 +53,16 @@ class KaryawanController extends Controller
                 $btn = '<button onclick="modalAction(\'' . url('/karyawan/' . $karyawan->karyawan_id . '/show_ajax') . '\')" class="btn btn-info btn-sm">Detail</button> ';
                 $btn = '<button onclick="modalAction(\'' . url('/karyawan/' . $karyawan->karyawan_id . '/create_ajax') . '\')" class="btn btn-info btn-sm">Detail</button> ';
                 $btn .= '<button onclick="modalAction(\'' . url('/karyawan/' . $karyawan->karyawan_id . '/edit_ajax') . '\')" class="btn btn-warning btn-sm">Edit</button> ';
-
                 $btn .= '<button onclick="modalAction(\'' . url('/karyawan/' . $karyawan->karyawan_id . '/delete_ajax') . '\')" class="btn btn-danger btn-sm">Hapus</button> ';
-
                 return $btn;
             })
-            ->rawColumns(['aksi']) // memberitahu bahwa kolom aksi mengandung HTML
+            ->rawColumns(['aksi']) 
             ->make(true);
     }
 
 
     // Menambah kan data karyawan baru
-    public function create()
+    public function create_ajax()
     {
         // Return view for creating a new Karyawan
         $jabatan = Jabatan::select('id', 'nama_jabatan', 'kode_jabatan')->get();
@@ -70,14 +70,16 @@ class KaryawanController extends Controller
         ->with(['jabatan' => $jabatan]);
     }
 
-    public function edit($id)
+    // form edit ajax
+    public function edit_ajax($id)
     {
         $karyawan = Karyawan::findOrFail($id);
-        return view('karyawan.edit_ajax', compact('karyawan'));
+        $jabatan = Jabatan::all();
+        return view('karyawan.edit_ajax', compact('karyawan', 'jabatan'));
     }
 
     // Hapus data karyawan
-    public function confirm($id)
+    public function confirm_ajax($id)
     {
         $karyawan = Karyawan::findOrFail($id);
         return view('karyawan.confirm_ajax', compact('karyawan'));
@@ -89,12 +91,19 @@ class KaryawanController extends Controller
         return response()->json($karyawan);
     }
 
+    public function show_ajax($id)
+    {
+        $karyawan = Karyawan::findOrFail($id);
+        return view('karyawan.show_ajax', compact('karyawan'));
+    }
+
+    // Simpan karyawan baru
     public function store_ajax(Request $request) {
         if ($request->ajax() || $request->wantsJson()) {
             $rules = [
                 'nama'       => 'required|string|max:100',
-                'nik'        => 'required|string|unique:karyawan|min:16|max:16',
-                'kode_jabatan' => 'required|string|exists:kode_jabatan',
+                'nik'        => 'required|string|unique:karyawan|min:6|max:16',
+                'kode_jabatan' => 'required|exists:kode_jabatan',
                 'email'      => 'required|string|max:100',
                 'alamat'     => 'required|string|min:5|max:255',
                 'no_telepon'    => 'required|string|min:10|max:15',
@@ -117,47 +126,59 @@ class KaryawanController extends Controller
         redirect('/');
     }
 
-    public function update_ajax(Request $request, $id)
+    //
+            public function update_ajax(Request $request, $id)
+            {
+                if ($request->ajax() || $request->wantsJson()) {
+                    $karyawan = Karyawan::findOrFail($id);
+
+                    $validator = Validator::make($request->all(), [
+                        'nama'       => 'required|string|max:100',
+                        'nik'        => 'required|string|unique:karyawan|min:6|max:16',
+                        'kode_jabatan' => 'required|exists:kode_jabatan',
+                        'email'      => 'required|string|max:100',
+                        'alamat'     => 'required|string|min:5|max:255',
+                        'no_telepon'    => 'required|string|min:10|max:15',
+                    ]);
+
+                    if ($validator->fails()) {
+                        return response()->json([
+                            'status'   => false,
+                            'message'  => 'Validasi gagal',
+                            'msgField' => $validator->errors()
+                        ]);
+                    }
+
+                    $karyawan->update($request->all());
+                    return response()->json([
+                        'status'  => true,
+                        'message' => 'Data karyawan berhasil diupdate'
+                    ]);
+                }
+                return redirect('/');
+            }
+
+    // hapus ajax
+    public function delete_ajax(Request $request, $id)
     {
         if ($request->ajax() || $request->wantsJson()) {
-            $karyawan = Karyawan::findOrFail($id);
+            $karyawan = Karyawan::find($id);
 
-            $validator = Validator::make($request->all(), [
-                'nama'       => 'required|string|max:100',
-                'nik'        => 'required|string|unique:karyawan|min:16|max:16',
-                'kode_jabatan' => 'required|string|exists:kode_jabatan',
-                'email'      => 'required|string|max:100',
-                'alamat'     => 'required|string|min:5|max:255',
-                'no_telepon'    => 'required|string|min:10|max:15',
-            ]);
-
-            if ($validator->fails()) {
+            if (!$karyawan) {
                 return response()->json([
-                    'status'   => false,
-                    'message'  => 'Validasi gagal',
-                    'msgField' => $validator->errors()
+                    'status' => false,
+                    'message' => 'Data karyawan tidak ditemukan'
                 ]);
             }
 
-            $karyawan->update($request->all());
-            return response()->json([
-                'status'  => true,
-                'message' => 'Data karyawan berhasil diupdate'
-            ]);
-        }
-        return redirect('/');
-    }
-
-    public function destroy_ajax($id)
-    {
-        if (request()->ajax()) {
-            $karyawan = Karyawan::findOrFail($id);
             $karyawan->delete();
+
             return response()->json([
-                'status'  => true,
+                'status' => true,
                 'message' => 'Data karyawan berhasil dihapus'
             ]);
         }
-        return redirect('/karyawan');
+
+        return redirect('/');
     }
 }

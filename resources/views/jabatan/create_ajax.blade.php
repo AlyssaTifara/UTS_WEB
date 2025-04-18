@@ -8,14 +8,14 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label>Kode Jabatan</label>
-                    <input value="" type="text" name="kode_jabatan" id="kode_jabatan" class="form-control" required>
-                    <small id="error-kode_jabatan" class="error-text form-text text-danger"></small>
-                </div>
                 <div class="form-group">
                     <label>Nama Jabatan</label>
                     <input value="" type="text" name="nama_jabatan" id="nama_jabatan" class="form-control" required>
                     <small id="error-nama_jabatan" class="error-text form-text text-danger"></small>
+                </div>
+                    <label>Kode Jabatan</label>
+                    <input value="" type="text" name="kode_jabatan" id="kode_jabatan" class="form-control" required>
+                    <small id="error-kode_jabatan" class="error-text form-text text-danger"></small>
                 </div>
                 <div class="form-group">
                     <label>Deskripsi</label>
@@ -35,15 +35,15 @@
     $(document).ready(function() {
         $("#form-tambah").validate({
             rules: {
-                kode_jabatan: {
-                    required: true,
-                    minlength: 3,
-                    maxlength: 10
-                },
                 nama_jabatan: {
                     required: true,
                     minlength: 3,
                     maxlength: 100
+                },
+                kode_jabatan: {
+                    required: true,
+                    minlength: 3,
+                    maxlength: 10
                 },
                 deskripsi: {
                     required: true,
