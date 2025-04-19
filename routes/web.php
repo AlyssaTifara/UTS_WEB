@@ -18,6 +18,7 @@ Route::group(['prefix' => 'karyawan'], function () {
     Route::get('/', [KaryawanController::class, 'index']);
     Route::post('/list', [KaryawanController::class, 'list']);
     Route::get('/show/{id}', [KaryawanController::class, 'show']);
+    Route::get('/ajax', [KaryawanController::class, 'store_ajax']);
     // Route::post('/karyawan', [KaryawanController::class, 'store_ajax']); 
     // Route::post('/karyawan/update/{id}', [KaryawanController::class, 'update_ajax']); 
 

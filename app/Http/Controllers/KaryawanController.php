@@ -51,7 +51,7 @@ class KaryawanController extends Controller
             })
             ->addColumn('aksi', function ($karyawan) {
                 $btn = '<button onclick="modalAction(\'' . url('/karyawan/' . $karyawan->karyawan_id . '/show_ajax') . '\')" class="btn btn-info btn-sm">Detail</button> ';
-                $btn = '<button onclick="modalAction(\'' . url('/karyawan/' . $karyawan->karyawan_id . '/create_ajax') . '\')" class="btn btn-info btn-sm">Detail</button> ';
+                // $btn = '<button onclick="modalAction(\'' . url('/karyawan/' . $karyawan->karyawan_id . '/create_ajax') . '\')" class="btn btn-info btn-sm">Detail</button> ';
                 $btn .= '<button onclick="modalAction(\'' . url('/karyawan/' . $karyawan->karyawan_id . '/edit_ajax') . '\')" class="btn btn-warning btn-sm">Edit</button> ';
                 $btn .= '<button onclick="modalAction(\'' . url('/karyawan/' . $karyawan->karyawan_id . '/delete_ajax') . '\')" class="btn btn-danger btn-sm">Hapus</button> ';
                 return $btn;
@@ -103,7 +103,7 @@ class KaryawanController extends Controller
             $rules = [
                 'nama'       => 'required|string|max:100',
                 'nik'        => 'required|string|unique:karyawan|min:6|max:16',
-                'kode_jabatan' => 'required|exists:kode_jabatan',
+                'kode_jabatan' => 'required|string|exists:jabatan,id', 
                 'email'      => 'required|string|max:100',
                 'alamat'     => 'required|string|min:5|max:255',
                 'no_telepon'    => 'required|string|min:10|max:15',
@@ -117,7 +117,12 @@ class KaryawanController extends Controller
                 ]);
             }
             
-            Karyawan::create($request->all());
+            $jabatanId = $request->input('kode_jabatan');
+            $jabatan = Jabatan::find($jabatanId);
+            $kodeJabatan = $jabatan->kode_jabatan; 
+            
+            Karyawan::create(array_merge($request->except('kode_jabatan'), ['kode_jabatan' => $kodeJabatan]));
+            
             return response()->json([
                 'status' => true,
                 'message' => 'Data user berhasil disimpan'
@@ -125,6 +130,7 @@ class KaryawanController extends Controller
         }
         redirect('/');
     }
+    
 
     //
             public function update_ajax(Request $request, $id)
@@ -135,7 +141,7 @@ class KaryawanController extends Controller
                     $validator = Validator::make($request->all(), [
                         'nama'       => 'required|string|max:100',
                         'nik'        => 'required|string|unique:karyawan|min:6|max:16',
-                        'kode_jabatan' => 'required|exists:kode_jabatan',
+                        'kode_jabatan' => 'required|string|exists:jabatan,id', 
                         'email'      => 'required|string|max:100',
                         'alamat'     => 'required|string|min:5|max:255',
                         'no_telepon'    => 'required|string|min:10|max:15',

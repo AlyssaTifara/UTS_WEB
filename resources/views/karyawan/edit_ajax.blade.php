@@ -27,28 +27,33 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label>Nama Karyawan</label>
-                    <input value="{{ $karyawan->name }}" type="text" name="name" id="name" class="form-control" required>
-                    <small id="error-name" class="error-text form-text text-danger"></small>
+                    <input value="{{ $karyawan->nama }}" type="text" name="nama" id="nama" class="form-control" required>
+                    <small id="error-nama" class="error-text form-text text-danger"></small>
                 </div>
                 <div class="form-group">
                     <label>Jabatan</label>
-                    <select name="jabatan_id" id="jabatan_id" class="form-control" required>
+                    <select name="kode_jabatan" id="kode_jabatan" class="form-control" required>
                         <option value="">- Pilih Jabatan -</option>
                         @foreach ($jabatan as $j)
-                            <option {{ $jabatan->id == $karyawan->jabatan_id ? 'selected' : '' }} value="{{ $jabatan->id }}">{{ $jabatan->nama }}</option>
+                        <option value="{{ $j->kode_jabatan }}">{{ $j->nama_jabatan }}</option>
                         @endforeach
                     </select>
-                    <small id="error-jabatan_id" class="error-text form-text text-danger"></small>
+                    <small id="error-kode_jabatan" class="error-text form-text text-danger"></small>
                 </div>
                 <div class="form-group">
                     <label>Email</label>
-                    <input value="{{ $karyawan->email }}" type="email" name="email" id="email" class="form-control" required>
+                    <input value="" type="email" name="email" id="email" class="form-control" required>
                     <small id="error-email" class="error-text form-text text-danger"></small>
                 </div>
                 <div class="form-group">
+                    <label>Alamat</label>
+                    <input value="" type="text" name="alamat" id="alamat" class="form-control" required>
+                    <small id="error-alamat" class="error-text form-text text-danger"></small>
+                </div>
+                <div class="form-group">
                     <label>Telepon</label>
-                    <input value="{{ $karyawan->telepon }}" type="text" name="telepon" id="telepon" class="form-control" required>
-                    <small id="error-telepon" class="error-text form-text text-danger"></small>
+                    <input value="" type="text" name="no_telepon" id="no_telepon" class="form-control" required>
+                    <small id="error-no_telepon" class="error-text form-text text-danger"></small>
                 </div>
             </div>
             <div class="modal-footer">

@@ -89,7 +89,7 @@
     <script src="{{ asset('adminlte2/plugins/jquery-validation/additional-methods.min.js') }}"></script>
     
     <!-- SweetAlert2 -->
-    <script src="{{ asset('adminlte2/plugins/sweetalert2/sweetalert2.min.css')}}"></script>
+    <script src="{{ asset('adminlte2/plugins/sweetalert2/sweetalert2.min.css') }}"></script>
 
     <!-- AdminLTE App -->
     <script src="{{ asset('adminlte2/dist/js/adminlte.min.js') }}"></script>

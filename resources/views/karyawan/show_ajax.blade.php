@@ -3,7 +3,7 @@
 @section('content')
     <div class="card card-outline card-primary">
         <div class="card-header">
-            <h3 class="card-title">{{ $karyawan->name }}</h3>
+            <h3 class="card-title">{{ $karyawan->nama }}</h3>
             <div class="card-tools"></div>
         </div>
         <div class="card-body">
@@ -19,12 +19,16 @@
                         <td>{{ $karyawan->id }}</td>
                     </tr>
                     <tr>
+                    <tr>
+                        <th>NIK Karyawan</th>
+                        <td>{{ $karyawan->j->kode_jabatan }}</td>
+                    </tr>
                         <th>Nama</th>
-                        <td>{{ $karyawan->name }}</td>
+                        <td>{{ $karyawan->nama }}</td>
                     </tr>
                     <tr>
                         <th>Jabatan</th>
-                        <td>{{ $karyawan->jabatan->nama }}</td>
+                        <td>{{ $karyawan->j->nama_jabatan }}</td>
                     </tr>
                     <tr>
                         <th>Email</th>
@@ -32,7 +36,7 @@
                     </tr>
                     <tr>
                         <th>Telepon</th>
-                        <td>{{ $karyawan->telepon }}</td>
+                        <td>{{ $karyawan->no_telepon }}</td>
                     </tr>
                 </table>
             @endempty
