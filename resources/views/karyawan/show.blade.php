@@ -19,16 +19,15 @@
                         <td>{{ $karyawan->id }}</td>
                     </tr>
                     <tr>
-                    <tr>
                         <th>NIK Karyawan</th>
-                        <td>{{ $karyawan->j->kode_jabatan }}</td>
+                        <td>{{ $karyawan->nik }}</td>
                     </tr>
                         <th>Nama</th>
                         <td>{{ $karyawan->nama }}</td>
                     </tr>
                     <tr>
                         <th>Jabatan</th>
-                        <td>{{ $karyawan->j->nama_jabatan }}</td>
+                        <td>{{ $karyawan->kode_jabatan }}</td>
                     </tr>
                     <tr>
                         <th>Email</th>

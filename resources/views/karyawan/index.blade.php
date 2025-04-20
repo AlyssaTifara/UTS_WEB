@@ -43,31 +43,71 @@
 @endpush
 
 @push('js')
-    <script>
-        function modalAction(url = ''){
-            $('#myModal').load(url,function(){
-                $('#myModal').modal('show');
-            });
-        }
-        $(document).ready(function() {
-            var dataKaryawan = $('#table_karyawan').DataTable({
-                serverSide: true,
-                ajax: {
+<script>
+    function modalAction(url = '') {
+        $('#myModal').load(url, function() {
+            $('#myModal').modal('show');
+        });
+    }
+    $(document).ready(function() {
+        var dataKaryawan = $('#table_karyawan').DataTable({
+            serverSide: true,
+            ajax: {
                     "url": "{{ url('karyawan/list') }}",
                     "dataType": "json",
                     "type": "POST"
                 },
-                columns: [
-                    { data: "DT_RowIndex", className: "text-center", orderable: false, searchable: false },
-                    { data: "nama", className: "", orderable: true, searchable: true },
-                    { data: "nik", className: "", orderable: true, searchable: true },
-                    { data: "jabatan_nama", className: "", orderable: true, searchable: true },
-                    { data: "email", className: "", orderable: true, searchable: true },
-                    { data: "alamat", className: "", orderable: true, searchable: true },
-                    { data: "no_telepon", className: "", orderable: true, searchable: true },
-                    { data: "aksi", className: "", orderable: false, searchable: false }
-                ]
-            });
+            columns: [
+                {
+                    data: "DT_RowIndex",
+                    className: "text-center",
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: "nama",
+                    className: "",
+                    orderable: true,
+                    searchable: true
+                },
+                {
+                    data: "nik",
+                    className: "",
+                    orderable: true,
+                    searchable: true
+                },
+                {
+                    data: "jabatan_nama",
+                    className: "",
+                    orderable: true,
+                    searchable: true
+                },
+                {
+                    data: "email",
+                    className: "",
+                    orderable: true,
+                    searchable: true
+                },
+                {
+                    data: "alamat",
+                    className: "",
+                    orderable: true,
+                    searchable: true
+                },
+                {
+                    data: "no_telepon",
+                    className: "",
+                    orderable: true,
+                    searchable: true
+                },
+                {
+                    data: "aksi",
+                    className: "",
+                    orderable: false,
+                    searchable: false
+                }
+            ]
         });
-    </script>
+    });
+</script>
 @endpush
