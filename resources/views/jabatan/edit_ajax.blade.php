@@ -70,38 +70,51 @@
             },
 
             submitHandler: function(form) {
-                let formData = $(form).serializeArray();
-                formData.push({ name: '_method', value: 'PUT' });
+            let formData = $(form).serializeArray();
+            formData.push({ name: '_method', value: 'PUT' });
 
-                $.ajax({
-                    url: form.action,
-                    type: 'POST', // Kirim sebagai POST, spoof _method ke PUT
-                    data: $.param(formData),
-                    success: function(response) {
-                        if (response.status) {
-                            $('#myModal').modal('hide');
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Berhasil',
-                                text: response.message
-                            });
-                            dataJabatan.ajax.reload();
-                        } else {
-                            $('.error-text').text('');
-                            $.each(response.msgField, function(prefix, val) {
-                                $('#error-' + prefix).text(val[0]);
-                            });
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Terjadi Kesalahan',
-                                text: response.message
-                            });
-                        }
+            $.ajax({
+                url: form.action,
+                type: 'POST',
+                data: $.param(formData),
+                success: function(response) {
+                    if (response.status) {
+                        // Tutup modal edit
+                        $('#modal-master').modal('hide');
+                        
+                        // Tampilkan notifikasi sukses
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil',
+                            text: response.message,
+                            showConfirmButton: true
+                        }).then((result) => {
+                            // Redirect ke halaman jabatan setelah alert diklik
+                            window.location.href = "{{ url('/jabatan') }}";
+                        });
+                        
+                    } else {
+                        $('.error-text').text('');
+                        $.each(response.msgField, function(prefix, val) {
+                            $('#error-' + prefix).text(val[0]);
+                        });
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Terjadi Kesalahan',
+                            text: response.message
+                        });
                     }
-                });
-
-                return false; // mencegah form submit default
-            },
+                },
+                error: function(xhr) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Terjadi kesalahan saat mengupdate data'
+                    });
+                }
+            });
+            return false;
+        }
 
             errorElement: 'span',
             errorPlacement: function(error, element) {

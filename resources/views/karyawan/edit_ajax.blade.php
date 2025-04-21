@@ -101,6 +101,9 @@
                 }
             },
             submitHandler: function(form) {
+                let formData = $(form).serializeArray();
+                formData.push({ name: '_method', value: 'PUT' });
+                
                 $.ajax({
                     url: form.action,
                     type: form.method,

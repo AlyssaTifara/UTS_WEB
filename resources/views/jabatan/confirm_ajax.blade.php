@@ -48,38 +48,48 @@
     </div>
 </form>
 <script>
+
     $(document).ready(function() {
         $("#form-delete").validate({
             rules: {},
             submitHandler: function(form) {
-                $.ajax({
-                    url: form.action,
-                    type: form.method,
-                    data: $(form).serialize(),
-                    success: function(response) {
-                        if (response.status) {
-                            $('#myModal').modal('hide');
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Berhasil',
-                                text: response.message
-                            });
-                            dataJabatan.ajax.reload();
-                        } else {
-                            $('.error-text').text('');
-                            $.each(response.msgField, function(prefix, val) {
-                                $('#error-' + prefix).text(val[0]);
-                            });
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Terjadi Kesalahan',
-                                text: response.message
-                            });
-                        }
+    let formData = $(form).serializeArray();
+    formData.push({ name: '_method', value: 'DELETE' });
+    
+    $.ajax({
+        url: form.action,
+        type: 'POST', // Tetap POST dengan spoofing DELETE
+        data: $.param(formData),
+        success: function(response) {
+            if (response.status) {
+                $('#modal-master').modal('hide'); // Sesuaikan dengan ID modal Anda
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil',
+                    text: response.message,
+                    willClose: () => {
+                        window.location.reload(); // Reload halaman setelah alert
                     }
                 });
-                return false;
-            },
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal',
+                    text: response.message
+                });
+            }
+        },
+        error: function(xhr) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Terjadi kesalahan saat menghapus data'
+            });
+        }
+    });
+    return false;
+}
+
             errorElement: 'span',
             errorPlacement: function(error, element) {
                 error.addClass('invalid-feedback');

@@ -146,33 +146,65 @@ public function store_ajax(Request $request)
         return view('jabatan.edit_ajax', compact('jabatan'));
     }
 
+    // public function update_ajax(Request $request, $id)
+    // {
+    //     if ($request->ajax() || $request->wantsJson()) {
+    //         $jabatan = Jabatan::findOrFail($id);
+
+    //         $validator = Validator::make($request->all(), [
+    //             'nama_jabatan' => 'required|string|max:255|unique:jabatan,nama_jabatan,'.$id,
+    //             'kode_jabatan' => 'required|string|max:255|unique:jabatan,kode_jabatan,'.$id,
+    //             'deskripsi'    => 'nullable|string',
+    //         ]);
+
+    //         if ($validator->fails()) {
+    //             return response()->json([
+    //                 'status'   => false,
+    //                 'message'  => 'Validasi gagal',
+    //                 'msgField' => $validator->errors()
+    //             ]);
+    //         }
+
+    //         $jabatan->update($request->all());
+    //         return response()->json([
+    //             'status'  => true,
+    //             'message' => 'Data jabatan berhasil diupdate'
+    //         ]);
+    //     }
+    //     return redirect('/jabatan');
+    // }
+
     public function update_ajax(Request $request, $id)
-    {
-        if ($request->ajax() || $request->wantsJson()) {
-            $jabatan = Jabatan::findOrFail($id);
+{
+    $jabatan = Jabatan::findOrFail($id);
 
-            $validator = Validator::make($request->all(), [
-                'nama_jabatan' => 'required|string|max:255|unique:jabatan,nama_jabatan,'.$id,
-                'kode_jabatan' => 'required|string|max:255|unique:jabatan,kode_jabatan,'.$id,
-                'deskripsi'    => 'nullable|string',
-            ]);
+    $validator = Validator::make($request->all(), [
+        'nama_jabatan' => 'required|string|max:255|unique:jabatan,nama_jabatan,'.$id,
+        'kode_jabatan' => 'required|string|max:255|unique:jabatan,kode_jabatan,'.$id,
+        'deskripsi'    => 'nullable|string',
+    ]);
 
-            if ($validator->fails()) {
-                return response()->json([
-                    'status'   => false,
-                    'message'  => 'Validasi gagal',
-                    'msgField' => $validator->errors()
-                ]);
-            }
-
-            $jabatan->update($request->all());
-            return response()->json([
-                'status'  => true,
-                'message' => 'Data jabatan berhasil diupdate'
-            ]);
-        }
-        return redirect('/jabatan');
+    if ($validator->fails()) {
+        return response()->json([
+            'status'   => false,
+            'message'  => 'Validasi gagal',
+            'msgField' => $validator->errors()
+        ]);
     }
+
+    try {
+        $jabatan->update($request->all());
+        return response()->json([
+            'status'  => true,
+            'message' => 'Data jabatan berhasil diupdate'
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'status'  => false,
+            'message' => 'Gagal mengupdate data: ' . $e->getMessage()
+        ]);
+    }
+}
 
     public function confirm_ajax($id)
     {
@@ -182,14 +214,18 @@ public function store_ajax(Request $request)
 
     public function destroy_ajax($id)
     {
-        if (request()->ajax()) {
+        try {
             $jabatan = Jabatan::findOrFail($id);
             $jabatan->delete();
             return response()->json([
-                'status'  => true,
+                'status' => true,
                 'message' => 'Data jabatan berhasil dihapus'
             ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Gagal menghapus data: ' . $e->getMessage()
+            ]);
         }
-        return redirect('/jabatan');
     }
 }
