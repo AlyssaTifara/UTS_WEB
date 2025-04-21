@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Jabatan;
+use App\Models\Karyawan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
+use Illuminate\View\View;
 
 class JabatanController extends Controller
 {
@@ -40,8 +42,8 @@ class JabatanController extends Controller
         return DataTables::of($jabatan)
             ->addIndexColumn()
             ->addColumn('aksi', function ($jabatan) {
-                $btn = '<button onclick="modalAction(\'' . url('/jabatan/' . $jabatan->id . '/show_ajax') . '\')" class="btn btn-info btn-sm">Detail</button> ';
-                $btn .= '<button onclick="modalAction(\'' . url('/jabatan/' . $jabatan->id . '/edit_ajax') . '\')" class="btn btn-warning btn-sm">Edit</button> ';
+                // $btn = '<button onclick="modalAction(\'' . url('/jabatan/' . $jabatan->id . '/show_ajax') . '\')" class="btn btn-info btn-sm">Detail</button> ';
+                $btn = '<button onclick="modalAction(\'' . url('/jabatan/' . $jabatan->id . '/edit_ajax') . '\')" class="btn btn-warning btn-sm">Edit</button> ';
                 $btn .= '<button onclick="modalAction(\'' . url('/jabatan/' . $jabatan->id . '/delete_ajax') . '\')" class="btn btn-danger btn-sm">Hapus</button> ';
                 return $btn;
             })
@@ -49,42 +51,94 @@ class JabatanController extends Controller
             ->make(true);
     }
 
-    public function create_ajax()
-    {
+    public function create_ajax(){
         return view('jabatan.create_ajax');
     }
 
-    public function store_ajax(Request $request)
-    {
-        if ($request->ajax() || $request->wantsJson()) {
-            $validator = Validator::make($request->all(), [
-                'nama_jabatan' => 'required|string|max:255|unique:jabatan,nama_jabatan',
-                'kode_jabatan' => 'required|string|max:255|unique:jabatan,kode_jabatan',
-                'deskripsi'    => 'nullable|string',
-            ]);
+//     public function store_ajax(Request $request)
+// {
+//     if ($request->ajax() || $request->wantsJson()) {
+//         $rules = [
+//             'nama_jabatan' => 'required|string|max:255|unique:jabatan,nama_jabatan',
+//             'kode_jabatan' => 'required|string|max:255|unique:jabatan,kode_jabatan',
+//             'deskripsi'    => 'nullable|string',
+//         ];
+//         $validator = Validator::make($request->all(), $rules);
+//             if ($validator->fails()) {
+//                 return response()->json([
+//                     'status' => false,
+//                     'message' => 'Validasi gagal',
+//                     'msgField' => $validator->errors()
+//                 ]);
+//             }
 
-            if ($validator->fails()) {
-                return response()->json([
-                    'status'   => false,
-                    'message'  => 'Validasi gagal',
-                    'msgField' => $validator->errors()
-                ]);
-            }
+//             $karyawanId = $request->input('kode_jabatan');
+//             $karyawan = Karyawan::find($karyawanId);
+//             $kodeJabatan = $karyawan->kode_jabatan; 
+//             Jabatan::create($request->all());
 
-            Jabatan::create($request->all());
+//         return response()->json([
+//             'status'  => true,
+//             'message' => 'Data jabatan berhasil disimpan'
+//         ]);
+//     }
+//     return redirect('/jabatan');
+// }
+
+public function store_ajax(Request $request)
+{
+    if ($request->ajax() || $request->wantsJson()) {
+        $rules = [
+            'nama_jabatan' => 'required|string|max:255|unique:jabatan,nama_jabatan',
+            'kode_jabatan' => 'required|string|max:255|unique:jabatan,kode_jabatan',
+            'deskripsi'    => 'nullable|string',
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
             return response()->json([
-                'status'  => true,
-                'message' => 'Data jabatan berhasil disimpan'
+                'status' => false,
+                'message' => 'Validasi gagal',
+                'msgField' => $validator->errors()
             ]);
         }
-        return redirect('/jabatan');
+
+        Jabatan::create($request->all());
+
+        return response()->json([
+            'status'  => true,
+            'message' => 'Data jabatan berhasil disimpan'
+        ]);
     }
+
+    return redirect('/jabatan');
+}
+
 
     public function show($id)
     {
         $jabatan = Jabatan::findOrFail($id);
         return response()->json($jabatan);
     }
+
+    // public function show(string $id): View
+    // {
+    //     $jabatan = Jabatan::with('karyawan')->findOrFail($id);
+
+    //     $breadcrumb = (object) [
+    //         'title' => 'Detail Jabatan',
+    //         'list'  => ['Home', 'Jabatan', 'Detail']
+    //     ];
+
+    //     $page = (object) [
+    //         'title' => 'Detail Jabatan'
+    //     ];
+
+    //     $activeMenu = 'Jabatan';
+
+    //     return view('jabatan.show', ['breadcrumb' => $breadcrumb, 'page' => $page, 'jabatan' => $jabatan, 'activeMenu' => $activeMenu]);
+    //     // return view('karyawan.show', compact('karyawan')); // Ini juga benar
+    // }
 
     public function edit_ajax($id)
     {

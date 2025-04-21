@@ -1,4 +1,4 @@
-@empty($barang)
+@empty($jabatan)
 <div id="modal-master" class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
         <div class="modal-header">
@@ -15,7 +15,7 @@
     </div>
 </div>
 @else
-<form action="{{ url('/jabatan/' . $barang->id . '/update_ajax') }}" method="POST" id="form-edit">
+<form action="{{ url('/jabatan/' . $jabatan->id . '/update_ajax') }}" method="POST" id="form-edit">
     @csrf
     @method('PUT')
     <div id="modal-master" class="modal-dialog modal-lg" role="document">
@@ -27,17 +27,17 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label>Kode Jabatan</label>
-                    <input value="{{ $barang->kode_jabatan }}" type="text" name="kode_jabatan" id="kode_jabatan" class="form-control" required>
+                    <input value="{{ $jabatan->kode_jabatan }}" type="text" name="kode_jabatan" id="kode_jabatan" class="form-control" required>
                     <small id="error-kode_jabatan" class="error-text form-text text-danger"></small>
                 </div>
                 <div class="form-group">
                     <label>Nama Jabatan</label>
-                    <input value="{{ $barang->nama_jabatan }}" type="text" name="nama_jabatan" id="nama_jabatan" class="form-control" required>
+                    <input value="{{ $jabatan->nama_jabatan }}" type="text" name="nama_jabatan" id="nama_jabatan" class="form-control" required>
                     <small id="error-nama_jabatan" class="error-text form-text text-danger"></small>
                 </div>
                 <div class="form-group">
                     <label>Deskripsi</label>
-                    <textarea name="deskripsi" id="deskripsi" class="form-control" required>{{ $barang->deskripsi }}</textarea>
+                    <textarea name="deskripsi" id="deskripsi" class="form-control" required>{{ $jabatan->deskripsi }}</textarea>
                     <small id="error-deskripsi" class="error-text form-text text-danger"></small>
                 </div>
             </div>
@@ -68,11 +68,15 @@
                     maxlength: 255
                 }
             },
+
             submitHandler: function(form) {
+                let formData = $(form).serializeArray();
+                formData.push({ name: '_method', value: 'PUT' });
+
                 $.ajax({
                     url: form.action,
-                    type: form.method,
-                    data: $(form).serialize(),
+                    type: 'POST', // Kirim sebagai POST, spoof _method ke PUT
+                    data: $.param(formData),
                     success: function(response) {
                         if (response.status) {
                             $('#myModal').modal('hide');
@@ -95,17 +99,19 @@
                         }
                     }
                 });
-                return false;
+
+                return false; // mencegah form submit default
             },
+
             errorElement: 'span',
             errorPlacement: function(error, element) {
                 error.addClass('invalid-feedback');
                 element.closest('.form-group').append(error);
             },
-            highlight: function(element, errorClass, validClass) {
+            highlight: function(element) {
                 $(element).addClass('is-invalid');
             },
-            unhighlight: function(element, errorClass, validClass) {
+            unhighlight: function(element) {
                 $(element).removeClass('is-invalid');
             }
         });

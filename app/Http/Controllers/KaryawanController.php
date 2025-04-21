@@ -168,8 +168,8 @@ class KaryawanController extends Controller
         // Validasi data input
         $validator = Validator::make($request->all(), [
             'nama'       => 'required|string|max:100',
-            'nik'        => 'required|string|unique:karyawan,nik,' . $id . ',karyawan_id', 
-            'kode_jabatan' => 'required|string|exists:jabatan,id',
+            'nik' => 'required|string|unique:karyawan,nik,' . $id,
+            'kode_jabatan' => 'required|string|exists:kode_jabatan',
             'email'      => 'required|string|email|max:100',  
             'alamat'     => 'required|string|min:5|max:255',
             'no_telepon' => 'required|string|min:10|max:15',
