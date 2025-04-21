@@ -31,28 +31,33 @@
                     <small id="error-nama" class="error-text form-text text-danger"></small>
                 </div>
                 <div class="form-group">
+                    <label>NIK Karyawan</label>
+                    <input value="{{ $karyawan->nik }}" type="text" name="nik" id="nik" class="form-control" required>
+                    <small id="error-nik" class="error-text form-text text-danger"></small>
+                </div>
+                <div class="form-group">
                     <label>Jabatan</label>
                     <select name="kode_jabatan" id="kode_jabatan" class="form-control" required>
                         <option value="">- Pilih Jabatan -</option>
                         @foreach ($jabatan as $j)
-                        <option value="{{ $j->kode_jabatan }}">{{ $j->nama_jabatan }}</option>
+                        <option value="{{ $j->kode_jabatan }}" {{ $karyawan->kode_jabatan == $j->kode_jabatan ? 'selected' : '' }}>{{ $j->nama_jabatan }}</option>
                         @endforeach
                     </select>
                     <small id="error-kode_jabatan" class="error-text form-text text-danger"></small>
                 </div>
                 <div class="form-group">
                     <label>Email</label>
-                    <input value="" type="email" name="email" id="email" class="form-control" required>
+                    <input value="{{ $karyawan->email }}" type="email" name="email" id="email" class="form-control" required>
                     <small id="error-email" class="error-text form-text text-danger"></small>
                 </div>
                 <div class="form-group">
                     <label>Alamat</label>
-                    <input value="" type="text" name="alamat" id="alamat" class="form-control" required>
+                    <input value="{{ $karyawan->alamat }}" type="text" name="alamat" id="alamat" class="form-control" required>
                     <small id="error-alamat" class="error-text form-text text-danger"></small>
                 </div>
                 <div class="form-group">
                     <label>Telepon</label>
-                    <input value="" type="text" name="no_telepon" id="no_telepon" class="form-control" required>
+                    <input value="{{ $karyawan->no_telepon }}" type="text" name="no_telepon" id="no_telepon" class="form-control" required>
                     <small id="error-no_telepon" class="error-text form-text text-danger"></small>
                 </div>
             </div>
@@ -67,19 +72,29 @@
     $(document).ready(function() {
         $("#form-edit").validate({
             rules: {
-                name: {
+                nama: {
                     required: true,
                     minlength: 3,
                     maxlength: 100
                 },
-                jabatan_id: {
-                    required: true
+                nik: {
+                    required: true,
+                    minlength: 6,  
+                    maxlength: 16
                 },
                 email: {
                     required: true,
                     email: true
                 },
-                telepon: {
+                alamat: {
+                    required: true,
+                    minlength: 5,
+                    maxlength: 255
+                },
+                kode_jabatan: {
+                    required: true
+                },
+                no_telepon: {
                     required: true,
                     minlength: 10,
                     maxlength: 15
@@ -92,7 +107,7 @@
                     data: $(form).serialize(),
                     success: function(response) {
                         if (response.status) {
-                            $('#myModal').modal('hide');
+                            $('#modal-master').closest('.modal').modal('hide');
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Berhasil',
@@ -108,6 +123,20 @@
                                 icon: 'error',
                                 title: 'Terjadi Kesalahan',
                                 text: response.message
+                            });
+                        }
+                    },
+                    error: function(xhr) {
+                        if (xhr.status === 422) {
+                            $('.error-text').text('');
+                            $.each(xhr.responseJSON.errors, function(prefix, val) {
+                                $('#error-' + prefix).text(val[0]);
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops!',
+                                text: 'Terjadi kesalahan sistem. Silakan coba lagi nanti.'
                             });
                         }
                     }
@@ -129,5 +158,3 @@
     });
 </script>
 @endempty
-</content>
-</edit_file>

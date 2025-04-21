@@ -66,7 +66,7 @@
     <script src="{{ asset('adminlte2/plugins/jquery/jquery.min.js') }}"></script>
 
     <!-- Bootstrap 4 -->
-    <script src="{{ asset('adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('adminlte2/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <script src="https://kit.fontawesome.com/3b26e74800.js" crossorigin="anonymous"></script>
 
     <!-- DataTables & Plugins -->
