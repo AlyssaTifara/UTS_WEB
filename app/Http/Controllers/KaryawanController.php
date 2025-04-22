@@ -8,9 +8,7 @@ use Yajra\DataTables\DataTables;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
-use Illuminate\View\View; // Import kelas View
-use Illuminate\Http\JsonResponse; // Import kelas JsonResponse
-use Illuminate\Http\RedirectResponse; // Import kelas RedirectResponse
+use Illuminate\View\View; 
 
 class KaryawanController extends Controller
 {
@@ -41,7 +39,7 @@ class KaryawanController extends Controller
     // Data dalam bentuk tabel
     public function list(Request $request)
     {
-        $karyawans = Karyawan::select('nama', 'nik', 'email', 'alamat', 'no_telepon', 'kode_jabatan')->with('jabatan');
+        $karyawans = Karyawan::select('id', 'nama', 'nik', 'email', 'alamat', 'no_telepon', 'kode_jabatan')->with('jabatan');
 
         // Filter data karyawan berdasarkan jabatan_id jika tersedia
         if ($request->kode_jabatan) {
@@ -53,12 +51,12 @@ class KaryawanController extends Controller
             ->addColumn('jabatan_nama', function ($karyawans) {
                 return $karyawans->jabatan->nama_jabatan ?? '-';
             })
-            ->addColumn('aksi', function ($karyawan) {
-                return '
-                    <button onclick="modalAction(\'' . url('/karyawan/' . $karyawan->karyawan_id . '/show') . '\')" class="btn btn-info btn-sm">Detail</button>
-                    <button onclick="modalAction(\'' . url('/karyawan/' . $karyawan->karyawan_id . '/edit_ajax') . '\')" class="btn btn-warning btn-sm">Edit</button>
-                    <button onclick="modalAction(\'' . url('/karyawan/' . $karyawan->karyawan_id . '/delete_ajax') . '\')" class="btn btn-danger btn-sm">Hapus</button>
-                ';
+            ->addColumn('aksi', function ($karyawans) {  
+                $btn  = '<button onclick="modalAction(\'' . url('/karyawan/' . $karyawans->id . '/show') . '\')" class="btn btn-info btn-sm">Detail</button> ';
+                $btn .= '<button onclick="modalAction(\'' . url('/karyawan/' . $karyawans->id . '/edit_ajax') . '\')" class="btn btn-warning btn-sm">Edit</button> ';
+                $btn .= '<button onclick="modalAction(\'' . url('/karyawan/' . $karyawans->id . '/delete_ajax') . '\')"  class="btn btn-danger btn-sm">Hapus</button> ';
+
+                return $btn;
             })    
             ->rawColumns(['aksi']) 
             ->make(true);
@@ -74,16 +72,22 @@ class KaryawanController extends Controller
     }
 
     // form edit ajax
-    public function edit_ajax($id)
+        public function edit_ajax($id)
     {
-        $karyawan = Karyawan::findOrFail($id);
-        $jabatan = Jabatan::all();
-        return view('karyawan.edit_ajax', compact('karyawan', 'jabatan'));
+        try {
+            $karyawan = Karyawan::findOrFail($id);
+            $jabatan = Jabatan::all();
+            return view('karyawan.edit_ajax', compact('karyawan', 'jabatan'));
+        } catch (\Exception $e) {
+            return redirect('/karyawan')->with('error', 'Gagal mengambil data: ' . $e->getMessage());
+        }
     }
 
+
+    
     public function show(string $id): View
     {
-        $karyawan = Karyawan::with('jabatan')->findOrFail($id);
+        $karyawans = Karyawan::with('jabatan')->findOrFail($id);
 
         $breadcrumb = (object) [
             'title' => 'Detail Karyawan',
@@ -96,8 +100,7 @@ class KaryawanController extends Controller
 
         $activeMenu = 'karyawan';
 
-        return view('karyawan.show', ['breadcrumb' => $breadcrumb, 'page' => $page, 'karyawan' => $karyawan, 'activeMenu' => $activeMenu]);
-        // return view('karyawan.show', compact('karyawan')); // Ini juga benar
+        return view('karyawan.show', ['breadcrumb' => $breadcrumb, 'page' => $page, 'karyawan' => $karyawans, 'activeMenu' => $activeMenu]);
     }
 
     // Simpan karyawan baru
@@ -138,7 +141,6 @@ class KaryawanController extends Controller
                 'message' => 'Terjadi kesalahan saat menyimpan data: ' . $e->getMessage(),
             ], 500); // Kode status 500 untuk server error
         }
-
             return response()->json([
                 'status' => true,
                 'message' => 'Data user berhasil disimpan'
@@ -168,10 +170,6 @@ class KaryawanController extends Controller
                 'msgField' => $validator->errors()
             ]);
         }
-
-        // $karyawan = Karyawan::findOrFail($id);
-
-         // Gunakan DB::transaction untuk memastikan atomicity
         try {
             $karyawan->update($request->all());
             return response()->json([
@@ -197,21 +195,15 @@ class KaryawanController extends Controller
         $karyawan = Karyawan::findOrFail($id);
         return view('karyawan.confirm_ajax', compact('karyawan'));
     }
-
     public function destroy_ajax($id)
     {
         try {
             $karyawan = Karyawan::findOrFail($id);
             $karyawan->delete();
-            return response()->json([
-                'status' => true,
-                'message' => 'Data karyawan berhasil dihapus'
-            ]);
+            return redirect('/karyawan')->with('success', 'Data karyawan berhasil dihapus.');
         } catch (\Exception $e) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Gagal menghapus data: ' . $e->getMessage()
-            ]);
+            return redirect('/karyawan')->with('error', 'Gagal menghapus data: ' . $e->getMessage());
         }
     }
+    
 }
