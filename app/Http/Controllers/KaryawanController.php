@@ -36,12 +36,13 @@ class KaryawanController extends Controller
         ]);
     }
 
+
     // Data dalam bentuk tabel
     public function list(Request $request)
     {
         $karyawans = Karyawan::select('id', 'nama', 'nik', 'email', 'alamat', 'no_telepon', 'kode_jabatan')->with('jabatan');
 
-        // Filter data karyawan berdasarkan jabatan_id jika tersedia
+        // Filter data karyawan berdasarkan jabatan_id
         if ($request->kode_jabatan) {
             $karyawans->where('kode_jabatan', $request->kode_jabatan);
         }
@@ -63,13 +64,13 @@ class KaryawanController extends Controller
     }
 
 
-    // Menambah kan data karyawan baru
+    // Menambahkan data karyawan baru
     public function create_ajax()
     {
-        // Return view for creating a new Karyawan
         $jabatan = Jabatan::select('id', 'nama_jabatan', 'kode_jabatan')->get();
         return view('karyawan.create_ajax')->with(['jabatan' => $jabatan]);
     }
+
 
     // form edit ajax
         public function edit_ajax($id)
@@ -84,7 +85,7 @@ class KaryawanController extends Controller
     }
 
 
-    
+    // Menampilkan detail satu karyawan berdasarkan id-nya
     public function show(string $id): View
     {
         $karyawans = Karyawan::with('jabatan')->findOrFail($id);
@@ -102,6 +103,7 @@ class KaryawanController extends Controller
 
         return view('karyawan.show', ['breadcrumb' => $breadcrumb, 'page' => $page, 'karyawan' => $karyawans, 'activeMenu' => $activeMenu]);
     }
+
 
     // Simpan karyawan baru
     public function store_ajax(Request $request) {
@@ -128,29 +130,17 @@ class KaryawanController extends Controller
             $kodeJabatan = $jabatan->kode_jabatan; 
 
             Karyawan::create(array_merge($request->except('kode_jabatan'), ['kode_jabatan' => $kodeJabatan]));
-            
-            // Gunakan DB::transaction untuk memastikan atomicity
-        try {
-            DB::beginTransaction();
-            Karyawan::create(array_merge($request->except('kode_jabatan'), ['kode_jabatan' => $kodeJabatan]));
-            DB::commit();
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return response()->json([
-                'status' => false,
-                'message' => 'Terjadi kesalahan saat menyimpan data: ' . $e->getMessage(),
-            ], 500); // Kode status 500 untuk server error
-        }
+
             return response()->json([
                 'status' => true,
                 'message' => 'Data user berhasil disimpan'
             ]);
         }
-        redirect('/');
+        redirect('/karyawan');
     }
-    
 
-    // Mengupdate data karyawan
+
+    // Mengupdate data karyawan setelah di edit
     public function update_ajax(Request $request, $id)
     {
         $karyawan = Karyawan::findOrFail($id);
@@ -187,9 +177,12 @@ class KaryawanController extends Controller
             'status'  => true,
             'message' => 'Data karyawan berhasil diupdate'
         ]);
+        
+        redirect('/karyawan');
     }
 
-    // hapus ajax
+
+    // Hapus data karyawan
     public function confirm_ajax($id)
     {
         $karyawan = Karyawan::findOrFail($id);

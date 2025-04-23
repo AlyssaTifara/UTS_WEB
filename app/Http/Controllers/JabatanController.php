@@ -32,7 +32,8 @@ class JabatanController extends Controller
         ]);
     }
 
-    // Data jabatan
+
+    // Data jabatan dalam bentuk tabel
     public function list(Request $request)
     {
         $jabatan = Jabatan::select(['id', 'nama_jabatan', 'kode_jabatan', 'deskripsi']); //Select the fields required
@@ -48,10 +49,12 @@ class JabatanController extends Controller
             ->make(true);
     }
 
+
     // Menambah jabatan baru 
     public function create_ajax(){
         return view('jabatan.create_ajax');
     }
+
 
     // Simpan karyawan baru
     public function store_ajax(Request $request)
@@ -84,11 +87,12 @@ class JabatanController extends Controller
     }
 
 
-    public function show($id)
-    {
-        $jabatan = Jabatan::findOrFail($id);
-        return response()->json($jabatan);
-    }
+    // // Menampilkan detail 
+    // public function show($id)
+    // {
+    //     $jabatan = Jabatan::findOrFail($id);
+    //     return response()->json($jabatan);
+    // }
 
 
     //Mengedit data jabatan 
@@ -130,7 +134,7 @@ class JabatanController extends Controller
     }
 
 
-    // hapus ajax
+    // Hapus data jabatan
     public function confirm_ajax($id)
     {
         $jabatan = Jabatan::findOrFail($id);

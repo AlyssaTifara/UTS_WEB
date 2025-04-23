@@ -13,6 +13,7 @@ Route::get('/jabatan', [JabatanController::class, 'index'])->name('jabatan.index
 Route::prefix('karyawan')->group(function () {
     Route::get('/', [KaryawanController::class, 'index'])->name('karyawan.index');
     Route::post('/list', [KaryawanController::class, 'list'])->name('karyawan.list');
+    Route::get('/{id}/show', [KaryawanController::class, 'show'])->name('karyawan.show');
 
     Route::get('/create_ajax', [KaryawanController::class, 'create_ajax'])->name('karyawan.create_ajax');
     Route::post('/ajax', [KaryawanController::class, 'store_ajax'])->name('karyawan.store_ajax');
@@ -23,6 +24,7 @@ Route::prefix('karyawan')->group(function () {
     Route::get('/{id}/delete_ajax', [KaryawanController::class, 'confirm_ajax'])->name('karyawan.confirm_ajax');
     Route::delete('/{id}/delete_ajax', [KaryawanController::class, 'destroy_ajax'])->name('karyawan.delete_ajax');
 });
+
 
 // Route Jabatan
 Route::prefix('jabatan')->group(function () {
